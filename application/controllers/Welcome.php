@@ -10,7 +10,7 @@ class Welcome extends CI_Controller
         parent::__construct();
         $this->load->helper('url');
         $this->load->helper('my');
-        $this->load->model('form_validation');
+        $this->load->library('form_validation');
         $this->load->library('cns');
 
         // $this->load->model('Patients_model', 'Demandas_model');
