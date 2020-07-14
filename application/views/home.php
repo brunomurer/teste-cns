@@ -24,11 +24,11 @@
           </div>
           <div class="form-group">
             <label for="varchar">CPF <?php echo form_error('numeroCpf') ?></label>
-            <input type="number" class="form-control" name="numeroCpf" id="numeroCpf" placeholder="Numero do Cpf" value="<?php echo $numeroCpf; ?>" />
+            <input type="text" class="form-control" name="numeroCpf" id="numeroCpf" placeholder="Numero do Cpf" value="<?php echo $numeroCpf; ?>" />
           </div>
           <div class="form-group">
-            <label for="number">Numero do cartao de saúde<?php echo form_error('numeroCartao') ?></label>
-            <input type="number" class="form-control" name="numeroCartao" id="numeroCartao" placeholder="Numero do cartao de saúde" value="<?php echo $numeroCartao; ?>" />
+            <label for="varchar">Numero do cartao de saúde<?php echo form_error('numeroCartao') ?></label>
+            <input type="text" class="form-control" name="numeroCartao" id="numeroCartao" placeholder="Numero do cartao de saúde" value="<?php echo $numeroCartao; ?>" />
           </div>
           <div class="form-group">
             <input type="hidden" name="id" value="<?php echo $id; ?>" /> 
