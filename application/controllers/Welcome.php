@@ -9,8 +9,10 @@ class Welcome extends CI_Controller
     {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->helper('my');
         $this->load->model('form_validation');
         $this->load->library('cns');
+
         // $this->load->model('Patients_model', 'Demandas_model');
 
     }
@@ -22,28 +24,43 @@ class Welcome extends CI_Controller
 
 
             $this->form_validation->set_rules('nomeCompleto', 'nomeCompleto', 'trim|required', array('required' => 'O campo nome é obrigatório'));
-			
+
             $this->form_validation->set_rules('nomeMae', 'nomeMae', 'trim|required', array('required' => 'O campo nome da mãe é obrigatório'));
-			
+
             $this->form_validation->set_rules('dataNascimento', 'dataNascimento', 'trim|required|callback_check_birthday', array('required' => 'O campo bairro é obrigatório', 'callback_check_birthday' => 'Data inválida'));
-			
+
             $this->form_validation->set_rules('numeroCpf', 'numeroCpf', 'trim|required|callback_check_cpf', array('required' => 'O campo cpf é obrigatório', 'callback_check_birthday' => 'Numero do CPF inválido'));
-			
+
             $this->form_validation->set_rules('numeroCartao', 'numeroCartao', 'trim|required|callback_check_cns', array('required' => 'O campo numero do CNS é obrigatório', 'callback_check_cns' => 'Numero do CNS inválido'));
 
 
+
             if ($this->form_validation->run() === FALSE) {
-             //   $this->session->set_flashdata('error', 'Nome de usuario ou senha estão errados');
-				        $this->load->view('header');
-                        $this->load->view('home', $data);
-                        $this->load->view('footer');
+                //   $this->session->set_flashdata('error', 'Nome de usuario ou senha estão errados');
+                $data = [
+                    'id' => set_value('id'),
+                    'nomeCompleto' => set_value('nomeCompleto'),
+                    'nomeMae' => set_value('nomeMae'),
+                    'dataNascimento' => set_value('dataNascimento'),
+                    'numeroCpf' => set_value('numeroCpf'),
+                    'numeroCartao' => set_value('numeroCartao'),
+                    'cep' => set_value('cep'),
+                    'endereco' => set_value('endereco'),
+                    'numero' => set_value('numero'),
+                    'cidade' => set_value('cidade'),
+                    'bairro' => set_value('bairro'),
+                    'estado' => set_value('estado'),
+                ];
+                $this->load->view('header');
+                $this->load->view('home', $data);
+                $this->load->view('footer');
             }
 
             $data = [
                 'nomeCompleto' => $this->input->post('nomeCompleto', TRUE),
                 'nomeMae' => $this->input->post('nomeMae', TRUE),
                 'dataNascimento' => $this->input->post('dataNascimento', TRUE),
-                'numeroCpf' => $this->input->post('numeroCpf', TRUE),
+                'numeroCpf' => cleanCPF($this->input->post('numeroCpf', TRUE)),
                 'numeroCartao' => $this->input->post('numeroCartao', TRUE),
                 'dataCadastro' => date('Y-m-d H:i:s'),
             ];
@@ -89,36 +106,34 @@ class Welcome extends CI_Controller
         $this->load->view('footer');
     }
 
-  function check_birthday($dataNascimento)
+    function check_birthday($dataNascimento)
     {
-		
-		if($dataNascimento) {
-		
-		     return TRUE;
+        $dataNascimento = DateTime::createFromFormat('d/m/Y', $_POST['dataNascimento']);
+        if ($dataNascimento && $data->format('d/m/Y') === $_POST['dataNascimento']) {
+            return TRUE;
         } else {
             return FALSE;
         }
-	}
-	
-	  function check_cpf($numeroCpf)
-    {
-		
-			if($numeroCpf) {
-		     return TRUE;
-        } else {
-            return FALSE;
-        }
-	}
+    }
 
-	  function check_cns($numeroCartao)
+    function check_cpf($numeroCpf)
     {
-		
-		
-			if($numeroCartao) {
-		     return TRUE;
+        $result = validateCPF($numeroCpf);
+        if ($result) {
+            return TRUE;
         } else {
             return FALSE;
         }
-	}
+    }
+
+    function check_cns($numeroCartao)
+    {
+        $result = $this->cns->run($numeroCartao);
+        if ($result) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 
 }
