@@ -6,8 +6,9 @@
 <script type="text/javascript">
     $(document).ready(function () {
         /* MASK */       
-        $('.numeroCpf').mask('000.000.000-00', {placeholder: "número do CPF"});
-        $('.dataNascimento').mask('00/00/0000', {placeholder: "Data de nascimento"});
+        $('#numeroCpf').mask('000.000.000-00', {placeholder: "número do CPF"});
+      //  $('#dataNascimento').mask('00-00-0000', {placeholder: "Data de nascimento"});
+		 $('#cep').mask('00000-000', {placeholder: "número do CEP"});
 		
 	});
 </script>
